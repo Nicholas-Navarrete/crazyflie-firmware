@@ -60,6 +60,19 @@ void controllerPid(control_t *control, const setpoint_t *setpoint,
 {
   control->controlMode = controlModeLegacy;
 
+  control->roll   = setpoint->attitude.roll;         // Motor 1
+  control->pitch  = setpoint->attitude.pitch;        // Motor 2
+  control->yaw    = setpoint->attitudeRate.yaw;      // Motor 3
+  control->thrust = setpoint->thrust;                // Motor 4
+
+  // Optional logging
+  cmd_roll = control->roll;
+  cmd_pitch = control->pitch;
+  cmd_yaw = control->yaw;
+  cmd_thrust = control->thrust;
+
+  return;  // Skip PID logic entirely
+
   if (RATE_DO_EXECUTE(ATTITUDE_RATE, stabilizerStep)) {
     // Rate-controled YAW is moving YAW angle setpoint
     if (setpoint->mode.yaw == modeVelocity) {
